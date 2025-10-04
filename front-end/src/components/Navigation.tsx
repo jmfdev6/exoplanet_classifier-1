@@ -2,10 +2,10 @@ import React from 'react';
 import { Button } from './ui/button';
 import { 
   Home, MessageSquare, GitCompare, Clock, 
-  Telescope, Users, Settings, BookOpen
+  Telescope, Users, Settings, BookOpen, Download, Upload, Plus, Hash
 } from 'lucide-react';
 
-export type NavigationView = 'home' | 'details' | 'discussions' | 'comparison' | 'timeline' | 'collaboration' | 'data' | 'profile' | 'settings';
+export type NavigationView = 'home' | 'details' | 'discussions' | 'comparison' | 'timeline' | 'collaboration' | 'data' | 'profile' | 'settings' | 'export' | 'create' | 'import' | 'community';
 
 interface NavigationProps {
   currentView: NavigationView;
@@ -15,7 +15,11 @@ interface NavigationProps {
 export function Navigation({ currentView, onViewChange }: NavigationProps) {
   const navigationItems = [
     { id: 'home' as NavigationView, label: 'Catálogo', icon: Home },
-    { id: 'discussions' as NavigationView, label: 'Discussões', icon: MessageSquare },
+    { id: 'create' as NavigationView, label: 'Criar', icon: Plus },
+    { id: 'export' as NavigationView, label: 'Exportar', icon: Download },
+    { id: 'import' as NavigationView, label: 'Importar', icon: Upload },
+    { id: 'collaboration' as NavigationView, label: 'Colaborar', icon: MessageSquare },
+    { id: 'community' as NavigationView, label: 'Comunidade', icon: Hash },
     { id: 'comparison' as NavigationView, label: 'Comparação', icon: GitCompare },
     { id: 'timeline' as NavigationView, label: 'Timeline', icon: Clock },
   ];

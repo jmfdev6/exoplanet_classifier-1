@@ -12,6 +12,10 @@ import { CollaborationPage } from './components/CollaborationPage';
 import { DataManagementPage } from './components/DataManagementPage';
 import { ProfilePage } from './components/ProfilePage';
 import { SettingsPage } from './components/SettingsPage';
+import { ExportDataPage } from './components/ExportDataPage';
+import { CreateExoplanetPage } from './components/CreateExoplanetPage';
+import { ImportExoplanetPage } from './components/ImportExoplanetPage';
+import { CommunityPage } from './components/CommunityPage';
 import { NavigationView } from './components/Navigation';
 import SpaceAuth from './components/SpaceAuth';
 
@@ -158,6 +162,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentView, setCurrentView] = useState<NavigationView>('home');
   const [selectedExoplanet, setSelectedExoplanet] = useState<Exoplanet | null>(null);
+  const [exoplanets, setExoplanets] = useState<Exoplanet[]>(mockExoplanets);
   const [filters, setFilters] = useState({
     detectionMethod: 'all',
     habitableZone: false,
@@ -166,7 +171,7 @@ export default function App() {
 
   // Filter and search logic
   const filteredExoplanets = useMemo(() => {
-    return mockExoplanets.filter((exoplanet) => {
+    return exoplanets.filter((exoplanet) => {
       const matchesSearch = exoplanet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            exoplanet.hostStar.toLowerCase().includes(searchQuery.toLowerCase());
       
@@ -180,7 +185,7 @@ export default function App() {
       
       return matchesSearch && matchesMethod && matchesHabitable && matchesYear;
     });
-  }, [searchQuery, filters]);
+  }, [searchQuery, filters, exoplanets]);
 
   // Stats calculation
   const stats = useMemo(() => {
@@ -202,11 +207,31 @@ export default function App() {
   };
 
   const handleViewDetails = (id: string) => {
-    const exoplanet = mockExoplanets.find(p => p.id === id);
+    const exoplanet = exoplanets.find(p => p.id === id);
     if (exoplanet) {
       setSelectedExoplanet(exoplanet);
       setCurrentView('details');
     }
+  };
+
+  const handleSaveExoplanet = (newExoplanet: Exoplanet) => {
+    setExoplanets(prev => [...prev, newExoplanet]);
+    setCurrentView('home');
+  };
+
+  const handleImportExoplanets = (importedExoplanets: Exoplanet[]) => {
+    setExoplanets(prev => [...prev, ...importedExoplanets]);
+  };
+
+  const handleExportExoplanet = (exoplanet: Exoplanet) => {
+    const dataStr = JSON.stringify(exoplanet, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${exoplanet.name.replace(/\s+/g, '_')}_data.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleBackToHome = () => {
@@ -243,7 +268,7 @@ export default function App() {
       case 'comparison':
         return (
           <ComparisonPage 
-            exoplanets={mockExoplanets} 
+            exoplanets={exoplanets} 
             onBack={handleBackToHome}
           />
         );
@@ -251,13 +276,25 @@ export default function App() {
       case 'timeline':
         return (
           <DiscoveryTimeline 
-            exoplanets={mockExoplanets} 
+            exoplanets={exoplanets} 
             onBack={handleBackToHome}
           />
         );
       
       case 'collaboration':
-        return <CollaborationPage onBack={handleBackToHome} />;
+        return <CollaborationPage exoplanets={exoplanets} onBack={handleBackToHome} />;
+      
+      case 'export':
+        return <ExportDataPage exoplanets={exoplanets} onBack={handleBackToHome} />;
+      
+      case 'create':
+        return <CreateExoplanetPage onBack={handleBackToHome} onSave={handleSaveExoplanet} />;
+      
+      case 'import':
+        return <ImportExoplanetPage onBack={handleBackToHome} onImport={handleImportExoplanets} />;
+      
+      case 'community':
+        return <CommunityPage onBack={handleBackToHome} />;
       
       case 'data':
         return <DataManagementPage onBack={handleBackToHome} />;
@@ -298,6 +335,7 @@ export default function App() {
                       onLike={handleLike}
                       onComment={handleComment}
                       onViewDetails={handleViewDetails}
+                      onExport={handleExportExoplanet}
                     />
                   ))}
                 </div>
