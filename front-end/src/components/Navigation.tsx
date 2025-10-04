@@ -1,10 +1,11 @@
+import React from 'react';
 import { Button } from './ui/button';
 import { 
   Home, MessageSquare, GitCompare, Clock, 
   Telescope, Users, Settings, BookOpen
 } from 'lucide-react';
 
-export type NavigationView = 'home' | 'details' | 'discussions' | 'comparison' | 'timeline' | 'collaboration' | 'data';
+export type NavigationView = 'home' | 'details' | 'discussions' | 'comparison' | 'timeline' | 'collaboration' | 'data' | 'profile' | 'settings';
 
 interface NavigationProps {
   currentView: NavigationView;

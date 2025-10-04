@@ -51,8 +51,8 @@ export function ExoplanetChart() {
           </TabsList>
           
           <TabsContent value="discoveries" className="mt-4">
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="h-64 min-h-[200px]">
+              <ResponsiveContainer width="100%" height="100%" minHeight={200}>
                 <BarChart data={discoveryData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
@@ -78,8 +78,8 @@ export function ExoplanetChart() {
           </TabsContent>
           
           <TabsContent value="methods" className="mt-4">
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="h-64 min-h-[200px]">
+              <ResponsiveContainer width="100%" height="100%" minHeight={200}>
                 <PieChart>
                   <Pie
                     data={detectionMethodData}
@@ -113,8 +113,8 @@ export function ExoplanetChart() {
           </TabsContent>
           
           <TabsContent value="habitability" className="mt-4">
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="h-64 min-h-[200px]">
+              <ResponsiveContainer width="100%" height="100%" minHeight={200}>
                 <LineChart data={habitabilityData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 

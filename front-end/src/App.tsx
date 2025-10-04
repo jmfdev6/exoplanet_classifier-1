@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Header } from './components/Header';
 import { ExoplanetCard, Exoplanet } from './components/ExoplanetCard';
 import { FilterPanel } from './components/FilterPanel';
@@ -10,7 +10,10 @@ import { ComparisonPage } from './components/ComparisonPage';
 import { DiscoveryTimeline } from './components/DiscoveryTimeline';
 import { CollaborationPage } from './components/CollaborationPage';
 import { DataManagementPage } from './components/DataManagementPage';
+import { ProfilePage } from './components/ProfilePage';
+import { SettingsPage } from './components/SettingsPage';
 import { NavigationView } from './components/Navigation';
+import SpaceAuth from './components/SpaceAuth';
 
 // Mock data for exoplanets
 const mockExoplanets: Exoplanet[] = [
@@ -150,6 +153,8 @@ const mockDiscussions = [
 ];
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentView, setCurrentView] = useState<NavigationView>('home');
   const [selectedExoplanet, setSelectedExoplanet] = useState<Exoplanet | null>(null);
@@ -209,6 +214,17 @@ export default function App() {
     setSelectedExoplanet(null);
   };
 
+  const handleLogin = (userData: { name: string; email: string }) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    setCurrentView('home');
+  };
+
   const renderCurrentView = () => {
     switch (currentView) {
       case 'details':
@@ -246,11 +262,17 @@ export default function App() {
       case 'data':
         return <DataManagementPage onBack={handleBackToHome} />;
       
+      case 'profile':
+        return user ? <ProfilePage user={user} onBack={handleBackToHome} onLogout={handleLogout} /> : <div>Usuário não encontrado</div>;
+      
+      case 'settings':
+        return <SettingsPage onBack={handleBackToHome} />;
+      
       default:
         return (
-          <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-            {/* Left sidebar - Filters */}
-            <div className="xl:col-span-1 order-2 xl:order-1">
+          <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+            {/* Filters - Above content on mobile/tablet, left sidebar on desktop */}
+            <div className="lg:col-span-1 xl:col-span-1 order-1">
               <FilterPanel 
                 filters={filters}
                 onFiltersChange={setFilters}
@@ -259,7 +281,7 @@ export default function App() {
             </div>
             
             {/* Main content */}
-            <div className="xl:col-span-2 order-1 xl:order-2 space-y-6">
+            <div className="lg:col-span-2 xl:col-span-2 order-2 space-y-4 lg:space-y-6">
               <div>
                 <h2 className="mb-4">
                   Catálogo de Exoplanetas
@@ -268,7 +290,7 @@ export default function App() {
                   </span>
                 </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2 gap-3 lg:gap-4">
                   {filteredExoplanets.map((exoplanet) => (
                     <ExoplanetCard
                       key={exoplanet.id}
@@ -291,7 +313,7 @@ export default function App() {
             </div>
             
             {/* Right sidebar - Discussions and Charts */}
-            <div className="xl:col-span-1 order-3 space-y-6">
+            <div className="lg:col-span-3 xl:col-span-1 order-3 space-y-4 lg:space-y-6">
               <div className="hidden lg:block">
                 <ExoplanetChart />
               </div>
@@ -302,6 +324,15 @@ export default function App() {
     }
   };
 
+  // Se não estiver autenticado, mostrar tela de login
+  if (!isAuthenticated) {
+    return (
+      <div style={{ backgroundColor: '#000000', minHeight: '100vh' }}>
+        <SpaceAuth onLogin={handleLogin} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header 
@@ -309,6 +340,7 @@ export default function App() {
         onSearchChange={setSearchQuery}
         currentView={currentView}
         onViewChange={setCurrentView}
+        user={user}
       />
       
       <main className="container mx-auto px-4 py-6">
