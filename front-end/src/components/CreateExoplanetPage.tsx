@@ -117,7 +117,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
         </Button>
-        <h1 className="text-2xl font-bold">Criar Exoplaneta TESS</h1>
+        <h1 className="text-2xl font-bold">Descobrir Exoplaneta Da Missão TESS</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
