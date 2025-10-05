@@ -9,9 +9,11 @@ import {
   TrendingUp, Clock, Mail, Phone, Video, ChevronRight,
   Filter, SlidersHorizontal, GraduationCap, Building2, MapPin as LocationIcon
 } from 'lucide-react';
+import { ResearcherProfilePage } from './ResearcherProfilePage';
 
 interface CommunityResearchersPageProps {
   onBack: () => void;
+  onNavigateToProfile?: (researcher: Researcher, topContributors: TopContributor[], newMembers: NewMember[]) => void;
 }
 
 interface Researcher {
@@ -50,11 +52,12 @@ interface NewMember {
   joinDate: string;
 }
 
-export function CommunityResearchersPage({ onBack }: CommunityResearchersPageProps) {
+export function CommunityResearchersPage({ onBack, onNavigateToProfile }: CommunityResearchersPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedResearcher, setSelectedResearcher] = useState<Researcher | null>(null);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [currentView, setCurrentView] = useState<'list' | 'profile'>('list');
   const [advancedFilters, setAdvancedFilters] = useState({
     expertise: '',
     institution: '',
@@ -291,97 +294,109 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
     }
   }, [researchers, selectedResearcher]);
 
+  // Se estamos na view de perfil e é mobile, renderiza a página de perfil
+  if (currentView === 'profile' && selectedResearcher && window.innerWidth < 1024) {
+    return (
+      <ResearcherProfilePage
+        researcher={selectedResearcher}
+        topContributors={topContributors}
+        newMembers={newMembers}
+        onBack={() => setCurrentView('list')}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={onBack} className="hover:bg-gray-100">
+      <div className="bg-white border-b border-gray-200 px-3 sm:px-6 py-2 sm:py-3 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+          <Button variant="ghost" size="sm" onClick={onBack} className="self-start sm:self-center hover:bg-gray-100 min-h-[44px] text-base sm:text-sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Voltar
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Pesquisadores da Comunidade</h1>
-            <p className="text-sm text-gray-500">Conheça os especialistas e colaboradores da plataforma</p>
+          <div className="text-center sm:text-left">
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900">Pesquisadores da Comunidade</h1>
+            <p className="text-xs sm:text-sm text-gray-500">Conheça os especialistas e colaboradores da plataforma</p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-6">
+      <div className="container mx-auto px-3 sm:px-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 mb-3 sm:mb-6">
           <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 text-sm font-medium">Pesquisadores</p>
-                  <p className="text-3xl font-bold">{researchers.length}</p>
+                  <p className="text-blue-100 text-xs sm:text-sm font-medium">Pesquisadores</p>
+                  <p className="text-xl sm:text-3xl font-bold">{researchers.length}</p>
                 </div>
-                <Users className="h-8 w-8 text-blue-200" />
+                <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 text-sm font-medium">Online agora</p>
-                  <p className="text-3xl font-bold">{researchers.filter(r => r.isOnline).length}</p>
+                  <p className="text-green-100 text-xs sm:text-sm font-medium">Online agora</p>
+                  <p className="text-xl sm:text-3xl font-bold">{researchers.filter(r => r.isOnline).length}</p>
                 </div>
-                <Globe className="h-8 w-8 text-green-200" />
+                <Globe className="h-6 w-6 sm:h-8 sm:w-8 text-green-200" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm font-medium">Projetos ativos</p>
-                  <p className="text-3xl font-bold">78</p>
+                  <p className="text-purple-100 text-xs sm:text-sm font-medium">Projetos ativos</p>
+                  <p className="text-xl sm:text-3xl font-bold">78</p>
                 </div>
-                <BookOpen className="h-8 w-8 text-purple-200" />
+                <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-orange-100 text-sm font-medium">Contribuições</p>
-                  <p className="text-3xl font-bold">1044</p>
+                  <p className="text-orange-100 text-xs sm:text-sm font-medium">Contribuições</p>
+                  <p className="text-xl sm:text-3xl font-bold">1044</p>
                 </div>
-                <Award className="h-8 w-8 text-orange-200" />
+                <Award className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200" />
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6">
           {/* Left Panel - Search, Filters and Researcher List */}
           <div className="lg:col-span-2">
             {/* Search Bar */}
-            <div className="mb-6">
+            <div className="mb-2 sm:mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Buscar pesquisadores..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
 
             {/* Filter Tabs */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex gap-1 bg-gray-100 p-1 rounded-lg flex-1 mr-4">
+            <div className="mb-2 sm:mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-2">
+                <div className="flex gap-1 bg-gray-100 p-1 rounded-lg flex-1 overflow-x-auto">
                   <button
                     onClick={() => setSelectedFilter('all')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap min-h-[44px] ${
                       selectedFilter === 'all'
                         ? 'bg-white text-gray-900 shadow-sm'
                         : 'text-gray-600 hover:text-gray-900'
@@ -391,7 +406,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   </button>
                   <button
                     onClick={() => setSelectedFilter('senior')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap min-h-[44px] ${
                       selectedFilter === 'senior'
                         ? 'bg-white text-gray-900 shadow-sm'
                         : 'text-gray-600 hover:text-gray-900'
@@ -401,7 +416,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   </button>
                   <button
                     onClick={() => setSelectedFilter('online')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap min-h-[44px] ${
                       selectedFilter === 'online'
                         ? 'bg-white text-gray-900 shadow-sm'
                         : 'text-gray-600 hover:text-gray-900'
@@ -411,7 +426,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   </button>
                   <button
                     onClick={() => setSelectedFilter('brazil')}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap min-h-[44px] ${
                       selectedFilter === 'brazil'
                         ? 'bg-white text-gray-900 shadow-sm'
                         : 'text-gray-600 hover:text-gray-900'
@@ -425,24 +440,26 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   variant="outline"
                   size="sm"
                   onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 min-h-[44px] text-base sm:text-sm"
                 >
                   <SlidersHorizontal className="h-4 w-4" />
-                  Filtros Avançados
+                  <span className="hidden sm:inline">Filtros Avançados</span>
+                  <span className="sm:hidden">Filtros</span>
                 </Button>
               </div>
 
               {/* Advanced Filters */}
               {showAdvancedFilters && (
-                <Card className="mb-6">
-                  <CardContent className="p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Card className="mb-2 sm:mb-4">
+                  <CardContent className="p-2 sm:p-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                       <div>
                         <label className="text-sm font-medium text-gray-700 mb-2 block">Especialidade</label>
                         <Input
                           placeholder="Ex: Astrofísica"
                           value={advancedFilters.expertise}
                           onChange={(e) => setAdvancedFilters(prev => ({ ...prev, expertise: e.target.value }))}
+                          className="min-h-[44px] text-base sm:text-sm"
                         />
                       </div>
                       <div>
@@ -451,6 +468,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                           placeholder="Ex: USP, NASA"
                           value={advancedFilters.institution}
                           onChange={(e) => setAdvancedFilters(prev => ({ ...prev, institution: e.target.value }))}
+                          className="min-h-[44px] text-base sm:text-sm"
                         />
                       </div>
                       <div>
@@ -459,6 +477,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                           placeholder="Ex: São Paulo"
                           value={advancedFilters.location}
                           onChange={(e) => setAdvancedFilters(prev => ({ ...prev, location: e.target.value }))}
+                          className="min-h-[44px] text-base sm:text-sm"
                         />
                       </div>
                       <div>
@@ -471,6 +490,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                           placeholder="0.0"
                           value={advancedFilters.minRating}
                           onChange={(e) => setAdvancedFilters(prev => ({ ...prev, minRating: parseFloat(e.target.value) || 0 }))}
+                          className="min-h-[44px] text-base sm:text-sm"
                         />
                       </div>
                       <div>
@@ -481,6 +501,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                           placeholder="0"
                           value={advancedFilters.minContributions}
                           onChange={(e) => setAdvancedFilters(prev => ({ ...prev, minContributions: parseInt(e.target.value) || 0 }))}
+                          className="min-h-[44px] text-base sm:text-sm"
                         />
                       </div>
                       <div className="flex items-end">
@@ -493,7 +514,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                             minRating: 0,
                             minContributions: 0
                           })}
-                          className="w-full"
+                          className="w-full min-h-[44px] text-base sm:text-sm"
                         >
                           Limpar Filtros
                         </Button>
@@ -504,12 +525,12 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
               )}
 
               {/* Additional Filter Buttons */}
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-2">
                 <Button
                   variant={selectedFilter === 'junior' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedFilter('junior')}
-                  className={selectedFilter === 'junior' ? 'bg-blue-600 text-white' : ''}
+                  className={`${selectedFilter === 'junior' ? 'bg-blue-600 text-white' : ''} min-h-[44px] text-xs sm:text-sm`}
                 >
                   <GraduationCap className="h-3 w-3 mr-1" />
                   Júnior ({researchers.filter(r => r.role.includes('Júnior')).length})
@@ -518,7 +539,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   variant={selectedFilter === 'principal' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedFilter('principal')}
-                  className={selectedFilter === 'principal' ? 'bg-blue-600 text-white' : ''}
+                  className={`${selectedFilter === 'principal' ? 'bg-blue-600 text-white' : ''} min-h-[44px] text-xs sm:text-sm`}
                 >
                   <Star className="h-3 w-3 mr-1" />
                   Principal ({researchers.filter(r => r.role.includes('Principal')).length})
@@ -527,7 +548,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   variant={selectedFilter === 'coordenador' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedFilter('coordenador')}
-                  className={selectedFilter === 'coordenador' ? 'bg-blue-600 text-white' : ''}
+                  className={`${selectedFilter === 'coordenador' ? 'bg-blue-600 text-white' : ''} min-h-[44px] text-xs sm:text-sm`}
                 >
                   <Building2 className="h-3 w-3 mr-1" />
                   Coordenador ({researchers.filter(r => r.role.includes('Coordenadora')).length})
@@ -536,7 +557,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                   variant={selectedFilter === 'professor' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedFilter('professor')}
-                  className={selectedFilter === 'professor' ? 'bg-blue-600 text-white' : ''}
+                  className={`${selectedFilter === 'professor' ? 'bg-blue-600 text-white' : ''} min-h-[44px] text-xs sm:text-sm`}
                 >
                   <GraduationCap className="h-3 w-3 mr-1" />
                   Professor ({researchers.filter(r => r.role.includes('Professor')).length})
@@ -545,7 +566,7 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
             </div>
 
             {/* Researchers List */}
-            <div className="space-y-3">
+            <div className="space-y-1">
               {filteredResearchers.map((researcher) => (
                 <Card 
                   key={researcher.id} 
@@ -554,31 +575,41 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                       ? 'ring-2 ring-blue-500 shadow-lg' 
                       : 'hover:shadow-md'
                   }`}
-                  onClick={() => setSelectedResearcher(researcher)}
+                  onClick={() => {
+                    setSelectedResearcher(researcher);
+                    // Em mobile, navega para a página de perfil
+                    if (window.innerWidth < 1024) {
+                      setCurrentView('profile');
+                    }
+                    // Se há callback externo, usa ele também
+                    if (onNavigateToProfile) {
+                      onNavigateToProfile(researcher, topContributors, newMembers);
+                    }
+                  }}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
+                  <CardContent className="p-2">
+                    <div className="flex items-center gap-2 sm:gap-4">
                       <div className="relative flex-shrink-0">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
                           {researcher.avatar}
                         </div>
                         {/* Fixed status indicator */}
-                        <div className={`absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-white ${
+                        <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 border-white ${
                           researcher.isOnline ? 'bg-green-500' : 'bg-gray-400'
                         }`}></div>
                       </div>
                       
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-gray-900 truncate">{researcher.name}</h3>
+                          <h3 className="font-semibold text-gray-900 truncate text-sm sm:text-base">{researcher.name}</h3>
                         </div>
-                        <p className="text-sm text-gray-600 mb-1">{researcher.role}</p>
+                        <p className="text-xs sm:text-sm text-gray-600 mb-1">{researcher.role}</p>
                         <div className="flex items-center gap-2">
                           <div className="flex items-center">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`h-3 w-3 ${
+                                className={`h-2 w-2 sm:h-3 sm:w-3 ${
                                   i < Math.floor(researcher.rating)
                                     ? 'text-yellow-400 fill-current'
                                     : 'text-gray-300'
@@ -599,26 +630,26 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
           </div>
 
           {/* Right Panel - Selected Researcher Profile */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 mt-6 lg:mt-0 hidden lg:block">
             {selectedResearcher ? (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Selected Researcher Profile */}
                 <Card>
-                  <CardContent className="p-6">
-                    <div className="text-center mb-6">
-                      <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="text-center mb-4 sm:mb-6">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-lg sm:text-2xl font-bold mx-auto mb-3">
                         {selectedResearcher.avatar}
                       </div>
                       
-                      <h2 className="text-xl font-bold text-gray-900 mb-1">{selectedResearcher.name}</h2>
-                      <p className="text-gray-600 mb-2">{selectedResearcher.role}</p>
+                      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">{selectedResearcher.name}</h2>
+                      <p className="text-sm sm:text-base text-gray-600 mb-2">{selectedResearcher.role}</p>
                       
                       <div className="flex items-center justify-center gap-2 mb-4">
                         <div className="flex items-center">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`h-4 w-4 ${
+                              className={`h-3 w-3 sm:h-4 sm:w-4 ${
                                 i < Math.floor(selectedResearcher.rating)
                                   ? 'text-yellow-400 fill-current'
                                   : 'text-gray-300'
@@ -629,58 +660,58 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                         <span className="text-sm text-gray-600">{selectedResearcher.rating}</span>
                       </div>
                       
-                      <div className="flex gap-2 justify-center">
-                        <Button variant="outline" size="sm">
+                      <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                        <Button variant="outline" size="sm" className="min-h-[44px] text-base sm:text-sm">
                           <MessageCircle className="h-4 w-4 mr-2" />
                           Contatar
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" className="min-h-[44px] text-base sm:text-sm">
                           <User className="h-4 w-4 mr-2" />
                           Perfil
                         </Button>
                       </div>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <div>
-                        <p className="text-sm text-gray-700 leading-relaxed">{selectedResearcher.bio}</p>
+                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">{selectedResearcher.bio}</p>
                       </div>
 
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Building2 className="h-4 w-4" />
+                      <div className="space-y-2 sm:space-y-3">
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                          <Building2 className="h-3 w-3 sm:h-4 sm:w-4" />
                           {selectedResearcher.affiliation}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <GraduationCap className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                          <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4" />
                           {selectedResearcher.education}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Calendar className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                           Membro desde {selectedResearcher.memberSince}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <LocationIcon className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                          <LocationIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                           {selectedResearcher.location}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <TrendingUp className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                          <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
                           {selectedResearcher.contributions} Contribuições
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <BookOpen className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                          <BookOpen className="h-3 w-3 sm:h-4 sm:w-4" />
                           {selectedResearcher.projects} Projetos • {selectedResearcher.collaborations} Colaborações
                         </div>
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-gray-900 mb-2">Trabalho Recente:</p>
-                        <p className="text-sm text-gray-600 italic">"{selectedResearcher.recentWork}"</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-900 mb-2">Trabalho Recente:</p>
+                        <p className="text-xs sm:text-sm text-gray-600 italic">"{selectedResearcher.recentWork}"</p>
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-gray-900 mb-2">Especialidades:</p>
-                        <div className="flex flex-wrap gap-2">
+                        <p className="text-xs sm:text-sm font-medium text-gray-900 mb-2">Especialidades:</p>
+                        <div className="flex flex-wrap gap-1 sm:gap-2">
                           {selectedResearcher.expertise.map((skill, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
                               {skill}
@@ -690,8 +721,8 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-gray-900 mb-2">Conquistas:</p>
-                        <div className="flex flex-wrap gap-2">
+                        <p className="text-xs sm:text-sm font-medium text-gray-900 mb-2">Conquistas:</p>
+                        <div className="flex flex-wrap gap-1 sm:gap-2">
                           {selectedResearcher.badges.map((badge, index) => (
                             <Badge key={index} className={`text-xs border ${getBadgeColor(badge)}`}>
                               {badge}
@@ -706,20 +737,20 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                 {/* Top Contributors */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Top Contribuidores</CardTitle>
+                    <CardTitle className="text-base sm:text-lg">Top Contribuidores</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {topContributors.map((contributor, index) => (
-                        <div key={contributor.id} className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        <div key={contributor.id} className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-xs sm:text-sm font-bold">
                             {contributor.avatar}
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-sm">{contributor.name}</p>
+                            <p className="font-medium text-xs sm:text-sm">{contributor.name}</p>
                             <p className="text-xs text-gray-500">{contributor.contributions} contribuições</p>
                           </div>
-                          <div className="w-6 h-6 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center text-xs font-bold">
+                          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center text-xs font-bold">
                             {index + 1}
                           </div>
                         </div>
@@ -731,20 +762,20 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
                 {/* New Members */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Novos Membros</CardTitle>
+                    <CardTitle className="text-base sm:text-lg">Novos Membros</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {newMembers.map((member) => (
-                        <div key={member.id} className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        <div key={member.id} className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-xs sm:text-sm font-bold">
                             {member.avatar}
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-sm">{member.name}</p>
+                            <p className="font-medium text-xs sm:text-sm">{member.name}</p>
                             <p className="text-xs text-gray-500">{member.joinDate}</p>
                           </div>
-                          <Clock className="h-4 w-4 text-gray-400" />
+                          <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
                         </div>
                       ))}
                     </div>
@@ -753,10 +784,10 @@ export function CommunityResearchersPage({ onBack }: CommunityResearchersPagePro
               </div>
             ) : (
               <Card>
-                <CardContent className="p-6 text-center">
-                  <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Selecione um pesquisador</h3>
-                  <p className="text-gray-500">
+                <CardContent className="p-4 sm:p-6 text-center">
+                  <Users className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Selecione um pesquisador</h3>
+                  <p className="text-xs sm:text-sm text-gray-500">
                     Escolha um pesquisador da lista para ver o perfil detalhado
                   </p>
                 </CardContent>

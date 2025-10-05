@@ -50,6 +50,7 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [newMessage, setNewMessage] = useState('');
+  const [showChat, setShowChat] = useState(false); // Para controlar visibilidade do chat em mobile
   const [newGroup, setNewGroup] = useState({
     name: '',
     description: '',
@@ -199,51 +200,53 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={onBack} className="hover:bg-gray-100">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <Button variant="ghost" size="sm" onClick={onBack} className="self-start sm:self-center hover:bg-gray-100 min-h-[44px] text-base sm:text-sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar
             </Button>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">ExoPlanet Hub</h1>
-              <p className="text-sm text-gray-500">Plataforma Colaborativa</p>
+            <div className="text-center sm:text-left">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">ExoPlanet Hub</h1>
+              <p className="text-xs sm:text-sm text-gray-500">Plataforma Colaborativa</p>
             </div>
             
             {/* Tab Navigation */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className="flex bg-gray-100 rounded-lg p-1 self-center">
               <button
                 onClick={() => setCurrentTab('groups')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors min-h-[44px] ${
                   currentTab === 'groups'
                     ? 'bg-white text-blue-600 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                <Hash className="h-4 w-4 mr-2 inline" />
-                Grupos
+                <Hash className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 inline" />
+                <span className="hidden sm:inline">Grupos</span>
+                <span className="sm:hidden">Grupos</span>
               </button>
               <button
                 onClick={() => setCurrentTab('users')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors min-h-[44px] ${
                   currentTab === 'users'
                     ? 'bg-white text-blue-600 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                <Users className="h-4 w-4 mr-2 inline" />
-                Usuários
+                <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 inline" />
+                <span className="hidden sm:inline">Usuários</span>
+                <span className="sm:hidden">Usuários</span>
               </button>
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="relative flex-1 sm:flex-none">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Buscar exoplanetas..."
-                className="pl-10 w-64 bg-gray-50 border-gray-200"
+                className="pl-10 w-full sm:w-64 bg-gray-50 border-gray-200 min-h-[44px] text-base sm:text-sm"
               />
             </div>
           </div>
@@ -256,9 +259,9 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
       ) : (
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - Groups List */}
-          <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+          <div className={`${showChat ? 'hidden sm:flex' : 'flex'} w-full sm:w-80 bg-white border-r border-gray-200 flex-col`}>
             {/* Search and Create */}
-            <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <div className="p-3 sm:p-4 border-b border-gray-200 bg-gray-50">
               <div className="flex gap-2 mb-3">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -266,13 +269,13 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                     placeholder="Buscar grupos..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500 min-h-[44px] text-base sm:text-sm"
                   />
                 </div>
                 <Button 
                   onClick={() => setShowCreateGroup(true)} 
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white min-h-[44px] px-3 sm:px-4"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -284,24 +287,27 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
               {filteredGroups.map((group) => (
                 <div
                   key={group.id}
-                  onClick={() => setSelectedGroup(group.id)}
-                  className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-all duration-200 ${
+                  onClick={() => {
+                    setSelectedGroup(group.id);
+                    setShowChat(true);
+                  }}
+                  className={`p-3 sm:p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-all duration-200 ${
                     selectedGroup === group.id ? 'bg-blue-50 border-l-4 border-l-blue-500 shadow-sm' : ''
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className="relative flex-shrink-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-xl shadow-sm">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl shadow-sm">
                         {group.avatar}
                       </div>
                       {group.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm"></div>
+                        <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-white rounded-full shadow-sm"></div>
                       )}
                     </div>
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-semibold text-gray-900 truncate text-sm">{group.name}</h3>
+                        <h3 className="font-semibold text-gray-900 truncate text-sm sm:text-base">{group.name}</h3>
                         <div className="flex items-center gap-1">
                           {group.isMuted && (
                             <BellOff className="h-3 w-3 text-gray-400" />
@@ -314,9 +320,9 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                         </div>
                       </div>
                       
-                      <p className="text-xs text-gray-600 truncate mb-2">{group.description}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 truncate mb-2">{group.description}</p>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
                         <div className="flex items-center gap-2">
                           <Badge className={`text-xs px-2 py-0.5 border ${getCategoryColor(group.category)}`}>
                             {getCategoryLabel(group.category)}
@@ -333,7 +339,7 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                       </div>
                       
                       {group.lastMessage && (
-                        <p className="text-xs text-gray-500 truncate mt-1 leading-relaxed">
+                        <p className="text-xs sm:text-sm text-gray-500 truncate mt-1 leading-relaxed">
                           {group.lastMessage}
                         </p>
                       )}
@@ -345,19 +351,27 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
           </div>
 
           {/* Main Content - Chat Area */}
-          <div className="flex-1 flex flex-col bg-gray-50">
+          <div className={`${showChat ? 'flex' : 'hidden sm:flex'} flex-1 flex-col bg-gray-50`}>
             {selectedGroup ? (
               <>
                 {/* Chat Header */}
-                <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+                <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setShowChat(false)}
+                        className="sm:hidden hover:bg-gray-100 min-h-[44px]"
+                      >
+                        <ArrowLeft className="h-4 w-4" />
+                      </Button>
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-sm">
                         {selectedGroupData?.avatar}
                       </div>
                       <div>
-                        <h2 className="font-semibold text-gray-900">{selectedGroupData?.name}</h2>
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <h2 className="font-semibold text-gray-900 text-sm sm:text-base">{selectedGroupData?.name}</h2>
+                        <p className="text-xs sm:text-sm text-gray-500 flex items-center gap-1">
                           <Users className="h-3 w-3" />
                           {selectedGroupData?.memberCount} membros • 
                           <span className={`ml-1 ${selectedGroupData?.isOnline ? 'text-green-600' : 'text-gray-500'}`}>
@@ -368,16 +382,16 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                     </div>
                     
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                      <Button variant="ghost" size="sm" className="hover:bg-gray-100 min-h-[44px] hidden sm:flex">
                         <Phone className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                      <Button variant="ghost" size="sm" className="hover:bg-gray-100 min-h-[44px] hidden sm:flex">
                         <Video className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                      <Button variant="ghost" size="sm" className="hover:bg-gray-100 min-h-[44px]">
                         <Settings className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                      <Button variant="ghost" size="sm" className="hover:bg-gray-100 min-h-[44px]">
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </div>
@@ -385,40 +399,40 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 sm:space-y-4 bg-gray-50">
                   {messages.map((message) => (
-                    <div key={message.id} className={`flex gap-3 ${message.isOwn ? 'flex-row-reverse' : ''}`}>
+                    <div key={message.id} className={`flex gap-2 sm:gap-3 ${message.isOwn ? 'flex-row-reverse' : ''}`}>
                       <div className="relative flex-shrink-0">
-                        <div className="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-sm shadow-sm">
+                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-xs sm:text-sm shadow-sm">
                           {message.avatar}
                         </div>
                         {message.isOnline && (
-                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                          <div className="absolute -bottom-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 border-2 border-white rounded-full"></div>
                         )}
                       </div>
                       
-                      <div className={`flex-1 max-w-[70%] ${message.isOwn ? 'text-right' : ''}`}>
+                      <div className={`flex-1 max-w-[75%] sm:max-w-[70%] ${message.isOwn ? 'text-right' : ''}`}>
                         <div className={`flex items-center gap-2 mb-1 ${message.isOwn ? 'justify-end' : ''}`}>
-                          <span className="font-medium text-gray-900 text-sm">{message.author}</span>
+                          <span className="font-medium text-gray-900 text-xs sm:text-sm">{message.author}</span>
                           <span className="text-xs text-gray-500">{message.timestamp}</span>
                         </div>
                         
-                        <div className={`bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-100 ${
+                        <div className={`bg-white rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-sm border border-gray-100 ${
                           message.isOwn ? 'bg-blue-500 text-white' : ''
                         }`}>
-                          <p className={`text-sm leading-relaxed ${message.isOwn ? 'text-white' : 'text-gray-800'}`}>
+                          <p className={`text-xs sm:text-sm leading-relaxed ${message.isOwn ? 'text-white' : 'text-gray-800'}`}>
                             {message.content}
                           </p>
                         </div>
                         
                         {message.reactions && message.reactions.length > 0 && (
-                          <div className={`flex gap-2 mt-2 ${message.isOwn ? 'justify-end' : ''}`}>
+                          <div className={`flex gap-1 sm:gap-2 mt-1 sm:mt-2 ${message.isOwn ? 'justify-end' : ''}`}>
                             {message.reactions.map((reaction, index) => (
                               <Button
                                 key={index}
                                 variant="ghost"
                                 size="sm"
-                                className="h-6 px-2 text-xs hover:bg-gray-100 rounded-full"
+                                className="h-5 sm:h-6 px-1 sm:px-2 text-xs hover:bg-gray-100 rounded-full"
                               >
                                 {reaction.emoji} {reaction.count}
                               </Button>
@@ -431,9 +445,9 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                 </div>
 
                 {/* Message Input */}
-                <div className="bg-white border-t border-gray-200 p-4 shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                <div className="bg-white border-t border-gray-200 p-3 sm:p-4 shadow-sm">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Button variant="ghost" size="sm" className="hover:bg-gray-100 min-h-[44px] hidden sm:flex">
                       <Paperclip className="h-4 w-4" />
                     </Button>
                     
@@ -443,25 +457,25 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                        className="pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-full"
+                        className="pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-full min-h-[44px] text-base sm:text-sm"
                       />
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 hover:bg-gray-100"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 hover:bg-gray-100 min-h-[40px]"
                       >
                         <Smile className="h-4 w-4" />
                       </Button>
                     </div>
                     
-                    <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                    <Button variant="ghost" size="sm" className="hover:bg-gray-100 min-h-[44px] hidden sm:flex">
                       <Mic className="h-4 w-4" />
                     </Button>
                     
                     <Button 
                       onClick={handleSendMessage} 
                       disabled={!newMessage.trim()}
-                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4"
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-3 sm:px-4 min-h-[44px]"
                     >
                       <Send className="h-4 w-4" />
                     </Button>
@@ -488,14 +502,14 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
       {showCreateGroup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 ease-out">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Criar Novo Grupo</h2>
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">Criar Novo Grupo</h2>
                 <Button 
                   variant="ghost" 
                   size="sm"
                   onClick={() => setShowCreateGroup(false)}
-                  className="hover:bg-gray-100 rounded-full"
+                  className="hover:bg-gray-100 rounded-full min-h-[44px]"
                 >
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -511,7 +525,7 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                     value={newGroup.name}
                     onChange={(e) => setNewGroup(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Digite o nome do grupo..."
-                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg min-h-[44px] text-base sm:text-sm"
                   />
                 </div>
                 
@@ -523,14 +537,14 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                     onChange={(e) => setNewGroup(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Descreva o propósito do grupo..."
                     rows={3}
-                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg min-h-[44px] text-base sm:text-sm"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="groupCategory" className="text-sm font-medium text-gray-700">Categoria</Label>
                   <Select value={newGroup.category} onValueChange={(value) => setNewGroup(prev => ({ ...prev, category: value }))}>
-                    <SelectTrigger className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
+                    <SelectTrigger className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg min-h-[44px] text-base sm:text-sm">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -543,10 +557,10 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                   </Select>
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <Button 
                     onClick={handleCreateGroup} 
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium min-h-[44px] text-base sm:text-sm"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Criar Grupo
@@ -554,7 +568,7 @@ export function CollaborationPage({ exoplanets, onBack }: CollaborationPageProps
                   <Button 
                     variant="outline" 
                     onClick={() => setShowCreateGroup(false)}
-                    className="border-gray-200 hover:bg-gray-50 rounded-lg font-medium"
+                    className="border-gray-200 hover:bg-gray-50 rounded-lg font-medium min-h-[44px] text-base sm:text-sm"
                   >
                     Cancelar
                   </Button>

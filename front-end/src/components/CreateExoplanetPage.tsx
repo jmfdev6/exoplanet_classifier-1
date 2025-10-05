@@ -111,16 +111,16 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={onBack}>
+    <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6 px-4 sm:px-6 lg:px-8 pb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+        <Button variant="ghost" size="sm" onClick={onBack} className="self-start sm:self-center min-h-[44px] text-base sm:text-sm">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
         </Button>
-        <h1 className="text-2xl font-bold">Descobrir Exoplaneta Da Missão TESS</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Descobrir Exoplaneta Da Missão TESS</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* TESS Identification */}
         <Card>
           <CardHeader>
@@ -129,8 +129,8 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
               Identificação TESS
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="toi">TOI (TESS Object of Interest)</Label>
                 <Input
@@ -139,6 +139,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   onChange={(e) => handleInputChange('toi', e.target.value)}
                   placeholder="Ex: 1234.01"
                   required
+                  className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -148,7 +149,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="tid"
                   value={formData.tid}
                   onChange={(e) => handleInputChange('tid', e.target.value)}
-                  placeholder="Ex: 123456789"
+                  placeholder="Ex: 123456789" className="min-h-[44px] text-base sm:text-sm"
                   required
                 />
               </div>
@@ -161,7 +162,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="ctoi_alias"
                   value={formData.ctoi_alias}
                   onChange={(e) => handleInputChange('ctoi_alias', e.target.value)}
-                  placeholder="Ex: 123456789.01"
+                  placeholder="Ex: 123456789.01" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -185,15 +186,15 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
           <CardHeader>
             <CardTitle>Posição</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="ra">RA [graus]</Label>
                 <Input
                   id="ra"
                   value={formData.ra}
                   onChange={(e) => handleInputChange('ra', e.target.value)}
-                  placeholder="Ex: 123.456"
+                  placeholder="Ex: 123.456" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -203,7 +204,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="dec"
                   value={formData.dec}
                   onChange={(e) => handleInputChange('dec', e.target.value)}
-                  placeholder="Ex: -45.678"
+                  placeholder="Ex: -45.678" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
@@ -215,7 +216,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="st_pmra"
                   value={formData.st_pmra}
                   onChange={(e) => handleInputChange('st_pmra', e.target.value)}
-                  placeholder="Ex: 12.34"
+                  placeholder="Ex: 12.34" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -225,7 +226,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="st_pmdec"
                   value={formData.st_pmdec}
                   onChange={(e) => handleInputChange('st_pmdec', e.target.value)}
-                  placeholder="Ex: -5.67"
+                  placeholder="Ex: -5.67" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
@@ -237,15 +238,15 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
           <CardHeader>
             <CardTitle>Propriedades do Planeta</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="pl_tranmid">Ponto Médio do Trânsito [BJD]</Label>
                 <Input
                   id="pl_tranmid"
                   value={formData.pl_tranmid}
                   onChange={(e) => handleInputChange('pl_tranmid', e.target.value)}
-                  placeholder="Ex: 2458325.1234"
+                  placeholder="Ex: 2458325.1234" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -255,7 +256,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="pl_orbper"
                   value={formData.pl_orbper}
                   onChange={(e) => handleInputChange('pl_orbper', e.target.value)}
-                  placeholder="Ex: 3.456"
+                  placeholder="Ex: 3.456" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
@@ -267,7 +268,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="pl_trandurh"
                   value={formData.pl_trandurh}
                   onChange={(e) => handleInputChange('pl_trandurh', e.target.value)}
-                  placeholder="Ex: 2.5"
+                  placeholder="Ex: 2.5" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -277,19 +278,19 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="pl_trandep"
                   value={formData.pl_trandep}
                   onChange={(e) => handleInputChange('pl_trandep', e.target.value)}
-                  placeholder="Ex: 1500"
+                  placeholder="Ex: 1500" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="pl_rade">Raio do Planeta [R⊕]</Label>
                 <Input
                   id="pl_rade"
                   value={formData.pl_rade}
                   onChange={(e) => handleInputChange('pl_rade', e.target.value)}
-                  placeholder="Ex: 1.2"
+                  placeholder="Ex: 1.2" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -299,7 +300,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="pl_insol"
                   value={formData.pl_insol}
                   onChange={(e) => handleInputChange('pl_insol', e.target.value)}
-                  placeholder="Ex: 1.1"
+                  placeholder="Ex: 1.1" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -309,7 +310,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="pl_eqt"
                   value={formData.pl_eqt}
                   onChange={(e) => handleInputChange('pl_eqt', e.target.value)}
-                  placeholder="Ex: 265"
+                  placeholder="Ex: 265" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
@@ -321,15 +322,15 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
           <CardHeader>
             <CardTitle>Propriedades Estelares</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="st_tmag">Magnitude TESS</Label>
                 <Input
                   id="st_tmag"
                   value={formData.st_tmag}
                   onChange={(e) => handleInputChange('st_tmag', e.target.value)}
-                  placeholder="Ex: 12.5"
+                  placeholder="Ex: 12.5" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -339,19 +340,19 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="st_dist"
                   value={formData.st_dist}
                   onChange={(e) => handleInputChange('st_dist', e.target.value)}
-                  placeholder="Ex: 140.2"
+                  placeholder="Ex: 140.2" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="st_teff">Temperatura Efetiva [K]</Label>
                 <Input
                   id="st_teff"
                   value={formData.st_teff}
                   onChange={(e) => handleInputChange('st_teff', e.target.value)}
-                  placeholder="Ex: 5778"
+                  placeholder="Ex: 5778" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -361,7 +362,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="st_logg"
                   value={formData.st_logg}
                   onChange={(e) => handleInputChange('st_logg', e.target.value)}
-                  placeholder="Ex: 4.44"
+                  placeholder="Ex: 4.44" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -371,7 +372,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="st_rad"
                   value={formData.st_rad}
                   onChange={(e) => handleInputChange('st_rad', e.target.value)}
-                  placeholder="Ex: 1.0"
+                  placeholder="Ex: 1.0" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
@@ -383,15 +384,15 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
           <CardHeader>
             <CardTitle>Informações Adicionais para Exibição</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nome do Exoplaneta</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
-                  placeholder="Ex: TOI-1234.01 b"
+                  placeholder="Ex: TOI-1234.01 b" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
               
@@ -401,7 +402,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                   id="hostStar"
                   value={formData.hostStar}
                   onChange={(e) => handleInputChange('hostStar', e.target.value)}
-                  placeholder="Ex: TOI-1234"
+                  placeholder="Ex: TOI-1234" className="min-h-[44px] text-base sm:text-sm"
                 />
               </div>
             </div>
@@ -414,6 +415,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 placeholder="Descreva características importantes do exoplaneta..."
                 rows={4}
+                className="min-h-[44px] text-base sm:text-sm"
               />
             </div>
 
@@ -424,6 +426,7 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
                 value={formData.image}
                 onChange={(e) => handleInputChange('image', e.target.value)}
                 placeholder="https://exemplo.com/imagem.jpg"
+                className="min-h-[44px] text-base sm:text-sm"
               />
             </div>
 
@@ -438,12 +441,12 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
           </CardContent>
         </Card>
 
-        <div className="flex gap-4">
-          <Button type="submit" className="flex-1">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <Button type="submit" className="flex-1 min-h-[44px] text-base sm:text-sm">
             <Save className="h-4 w-4 mr-2" />
             Salvar Exoplaneta TESS
           </Button>
-          <Button type="button" variant="outline" onClick={onBack}>
+          <Button type="button" variant="outline" onClick={onBack} className="min-h-[44px] text-base sm:text-sm">
             Cancelar
           </Button>
         </div>

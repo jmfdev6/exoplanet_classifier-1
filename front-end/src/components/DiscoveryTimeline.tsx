@@ -8,7 +8,7 @@ import {
   Filter, Star, Eye, Award, Zap
 } from 'lucide-react';
 import { Exoplanet } from './ExoplanetCard';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface DiscoveryTimelineProps {
   exoplanets: Exoplanet[];
@@ -116,14 +116,14 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={onBack} className="p-2 h-auto">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-6 lg:px-8 pb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+        <Button variant="ghost" onClick={onBack} className="self-start sm:self-center p-2 h-auto min-h-[44px]">
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div>
-          <h1>Timeline de Descobertas</h1>
-          <p className="text-muted-foreground">
+        <div className="text-center sm:text-left">
+          <h1 className="text-xl sm:text-2xl font-bold">Timeline de Descobertas</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
             Acompanhe as descobertas mais recentes e marcos importantes da astronomia
           </p>
         </div>
@@ -137,11 +137,11 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1">
               <label className="text-sm font-medium mb-2 block">Ano</label>
               <Select value={filterYear} onValueChange={setFilterYear}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-base sm:text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -156,7 +156,7 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
             <div className="flex-1">
               <label className="text-sm font-medium mb-2 block">Método</label>
               <Select value={filterMethod} onValueChange={setFilterMethod}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-base sm:text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -172,25 +172,25 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
         </CardContent>
       </Card>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {filteredDiscoveries.map((discovery, index) => (
           <div key={discovery.id} className="relative">
             {index < filteredDiscoveries.length - 1 && (
-              <div className="absolute left-8 top-20 bottom-0 w-px bg-border" />
+              <div className="absolute left-4 sm:left-8 top-16 sm:top-20 bottom-0 w-px bg-border" />
             )}
             
-            <Card className="ml-16 hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex gap-4">
-                  <div className="absolute left-4 top-6 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <Card className="ml-8 sm:ml-16 hover:shadow-md transition-shadow">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex gap-3 sm:gap-4">
+                  <div className="absolute left-2 sm:left-4 top-4 sm:top-6 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center">
                     {getImportanceIcon(discovery.importance)}
                   </div>
                   
                   <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="font-medium mb-1">{discovery.title}</h3>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 gap-2">
+                      <div className="flex-1">
+                        <h3 className="font-medium mb-1 text-sm sm:text-base">{discovery.title}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground mb-2">
                           <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             {new Date(discovery.date).toLocaleDateString('pt-BR')}
@@ -201,23 +201,26 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
                           </div>
                           <div className="flex items-center gap-1">
                             <TrendingUp className="h-3 w-3" />
-                            {discovery.team}
+                            <span className="hidden sm:inline">{discovery.team}</span>
+                            <span className="sm:hidden">{discovery.team.split(' ')[0]}</span>
                           </div>
                         </div>
                       </div>
-                      {getImportanceBadge(discovery.importance)}
+                      <div className="self-start sm:self-auto">
+                        {getImportanceBadge(discovery.importance)}
+                      </div>
                     </div>
                     
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground mb-4 text-sm sm:text-base">
                       {discovery.description}
                     </p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="md:col-span-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                      <div className="lg:col-span-2">
                         <p className="text-sm mb-3">{discovery.details}</p>
-                        <div className="flex gap-2">
-                          <Badge variant="outline">{discovery.method}</Badge>
-                          <Badge variant="outline">{discovery.team}</Badge>
+                        <div className="flex flex-wrap gap-2">
+                          <Badge variant="outline" className="text-xs">{discovery.method}</Badge>
+                          <Badge variant="outline" className="text-xs">{discovery.team}</Badge>
                         </div>
                       </div>
                       
@@ -239,10 +242,10 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
 
       {filteredDiscoveries.length === 0 && (
         <Card>
-          <CardContent className="text-center py-12">
-            <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="font-medium mb-2">Nenhuma descoberta encontrada</h3>
-            <p className="text-muted-foreground">
+          <CardContent className="text-center py-8 sm:py-12">
+            <Calendar className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-muted-foreground mb-4" />
+            <h3 className="font-medium mb-2 text-sm sm:text-base">Nenhuma descoberta encontrada</h3>
+            <p className="text-muted-foreground text-sm sm:text-base">
               Não há descobertas que correspondem aos filtros selecionados.
             </p>
           </CardContent>
@@ -254,28 +257,28 @@ export function DiscoveryTimeline({ exoplanets, onBack }: DiscoveryTimelineProps
           <CardTitle>Estatísticas da Timeline</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 border rounded-lg">
-              <h4 className="font-medium">Total de Descobertas</h4>
-              <p className="text-2xl font-medium text-primary mt-1">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="text-center p-3 sm:p-4 border rounded-lg">
+              <h4 className="font-medium text-xs sm:text-sm">Total de Descobertas</h4>
+              <p className="text-xl sm:text-2xl font-medium text-primary mt-1">
                 {filteredDiscoveries.length}
               </p>
             </div>
-            <div className="text-center p-4 border rounded-lg">
-              <h4 className="font-medium">Descobertas Críticas</h4>
-              <p className="text-2xl font-medium text-yellow-500 mt-1">
+            <div className="text-center p-3 sm:p-4 border rounded-lg">
+              <h4 className="font-medium text-xs sm:text-sm">Descobertas Críticas</h4>
+              <p className="text-xl sm:text-2xl font-medium text-yellow-500 mt-1">
                 {filteredDiscoveries.filter(d => d.importance === 'critical').length}
               </p>
             </div>
-            <div className="text-center p-4 border rounded-lg">
-              <h4 className="font-medium">Método Mais Usado</h4>
-              <p className="text-sm font-medium mt-1">
+            <div className="text-center p-3 sm:p-4 border rounded-lg">
+              <h4 className="font-medium text-xs sm:text-sm">Método Mais Usado</h4>
+              <p className="text-xs sm:text-sm font-medium mt-1">
                 Trânsito
               </p>
             </div>
-            <div className="text-center p-4 border rounded-lg">
-              <h4 className="font-medium">Ano Mais Produtivo</h4>
-              <p className="text-sm font-medium mt-1">
+            <div className="text-center p-3 sm:p-4 border rounded-lg">
+              <h4 className="font-medium text-xs sm:text-sm">Ano Mais Produtivo</h4>
+              <p className="text-xs sm:text-sm font-medium mt-1">
                 2024
               </p>
             </div>
