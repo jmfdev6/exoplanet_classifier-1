@@ -21,7 +21,6 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
     tid: '',
     ctoi_alias: '',
     pl_pnum: 1,
-    tfopwg_disp: 'PC',
     
     // Position
     ra: '',
@@ -178,22 +177,6 @@ export function CreateExoplanetPage({ onBack, onSave }: CreateExoplanetPageProps
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="tfopwg_disp">Disposição TFOPWG</Label>
-              <Select value={formData.tfopwg_disp} onValueChange={(value) => handleInputChange('tfopwg_disp', value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="PC">PC - Planetary Candidate</SelectItem>
-                  <SelectItem value="CP">CP - Confirmed Planet</SelectItem>
-                  <SelectItem value="FP">FP - False Positive</SelectItem>
-                  <SelectItem value="FA">FA - False Alarm</SelectItem>
-                  <SelectItem value="APC">APC - Ambiguous Planetary Candidate</SelectItem>
-                  <SelectItem value="KP">KP - Known Planet</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </CardContent>
         </Card>
 

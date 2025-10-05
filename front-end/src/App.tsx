@@ -8,16 +8,17 @@ import { ExoplanetDetails } from './components/ExoplanetDetails';
 import { DiscussionsPage } from './components/DiscussionsPage';
 import { ComparisonPage } from './components/ComparisonPage';
 import { DiscoveryTimeline } from './components/DiscoveryTimeline';
-import { CollaborationPage } from './components/CollaborationPage';
+import { CommunityResearchersPage } from './components/CommunityResearchersPage';
+import { CommunityDiscussionsPage } from './components/CommunityDiscussionsPage';
 import { DataManagementPage } from './components/DataManagementPage';
 import { ProfilePage } from './components/ProfilePage';
 import { SettingsPage } from './components/SettingsPage';
 import { ExportDataPage } from './components/ExportDataPage';
 import { CreateExoplanetPage } from './components/CreateExoplanetPage';
 import { ImportExoplanetPage } from './components/ImportExoplanetPage';
-import { CommunityPage } from './components/CommunityPage';
+// import { CommunityPage } from './components/CommunityPage'; // Removed - community page disabled
 import { NavigationView } from './components/Navigation';
-import SpaceAuth from './components/SpaceAuth';
+// import SpaceAuth from './components/SpaceAuth'; // Removed - authentication disabled
 
 // Mock data for exoplanets
 const mockExoplanets: Exoplanet[] = [
@@ -157,8 +158,8 @@ const mockDiscussions = [
 ];
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [user, setUser] = useState<{ name: string; email: string } | null>({ name: 'Usuário', email: 'usuario@exemplo.com' });
   const [searchQuery, setSearchQuery] = useState('');
   const [currentView, setCurrentView] = useState<NavigationView>('home');
   const [selectedExoplanet, setSelectedExoplanet] = useState<Exoplanet | null>(null);
@@ -281,8 +282,11 @@ export default function App() {
           />
         );
       
-      case 'collaboration':
-        return <CollaborationPage exoplanets={exoplanets} onBack={handleBackToHome} />;
+      case 'researchers':
+        return <CommunityResearchersPage onBack={handleBackToHome} />;
+      
+      case 'community-discussions':
+        return <CommunityDiscussionsPage onBack={handleBackToHome} />;
       
       case 'export':
         return <ExportDataPage exoplanets={exoplanets} onBack={handleBackToHome} />;
@@ -293,8 +297,8 @@ export default function App() {
       case 'import':
         return <ImportExoplanetPage onBack={handleBackToHome} onImport={handleImportExoplanets} />;
       
-      case 'community':
-        return <CommunityPage onBack={handleBackToHome} />;
+      // case 'community':
+      //   return <CommunityPage onBack={handleBackToHome} />;
       
       case 'data':
         return <DataManagementPage onBack={handleBackToHome} />;
@@ -362,14 +366,14 @@ export default function App() {
     }
   };
 
-  // Se não estiver autenticado, mostrar tela de login
-  if (!isAuthenticated) {
-    return (
-      <div style={{ backgroundColor: '#000000', minHeight: '100vh' }}>
-        <SpaceAuth onLogin={handleLogin} />
-      </div>
-    );
-  }
+  // Authentication removed - app now starts directly
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div style={{ backgroundColor: '#000000', minHeight: '100vh' }}>
+  //       <SpaceAuth onLogin={handleLogin} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-background">

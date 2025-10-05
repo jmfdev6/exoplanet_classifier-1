@@ -5,7 +5,7 @@ import {
   Telescope, Users, Settings, BookOpen, Download, Upload, Plus, Hash
 } from 'lucide-react';
 
-export type NavigationView = 'home' | 'details' | 'discussions' | 'comparison' | 'timeline' | 'collaboration' | 'data' | 'profile' | 'settings' | 'export' | 'create' | 'import' | 'community';
+export type NavigationView = 'home' | 'details' | 'discussions' | 'comparison' | 'timeline' | 'researchers' | 'community-discussions' | 'data' | 'profile' | 'settings' | 'export' | 'create' | 'import';
 
 interface NavigationProps {
   currentView: NavigationView;
@@ -15,11 +15,11 @@ interface NavigationProps {
 export function Navigation({ currentView, onViewChange }: NavigationProps) {
   const navigationItems = [
     { id: 'home' as NavigationView, label: 'Catálogo', icon: Home },
-    { id: 'create' as NavigationView, label: 'Criar', icon: Plus },
+    { id: 'create' as NavigationView, label: 'Contribuir', icon: Plus },
     { id: 'export' as NavigationView, label: 'Exportar', icon: Download },
     { id: 'import' as NavigationView, label: 'Importar', icon: Upload },
-    { id: 'collaboration' as NavigationView, label: 'Colaborar', icon: MessageSquare },
-    { id: 'community' as NavigationView, label: 'Comunidade', icon: Hash },
+    { id: 'community-discussions' as NavigationView, label: 'Discussões', icon: MessageSquare },
+    { id: 'researchers' as NavigationView, label: 'Pesquisadores', icon: Users },
     { id: 'comparison' as NavigationView, label: 'Comparação', icon: GitCompare },
     { id: 'timeline' as NavigationView, label: 'Timeline', icon: Clock },
   ];
